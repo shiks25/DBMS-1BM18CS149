@@ -35,7 +35,7 @@ select s.sname from supplier s where not exists(select pid from parts
                                             except
                                            select c.pid from catalog c where c.sid=s.sid);     
                                                                                                                                       
-/*or
+/*alternate query
 select  sname from supplier s
 where s.sid in  (select sid from catalog 
                  group by sid 
@@ -47,7 +47,7 @@ select s.sname from supplier s where not exists(select pid from parts where colo
                                               except
                                               select c.pid from catalog c,parts p where c.sid=s.sid and c.pid=p.pid and p.color='Red');
                                                                                                                                      
-/*or
+/*alternate query
 select distinct sname from supplier s,catalog c,parts p
 where s.sid=c.sid and c.pid = p.pid and p.color='Red';*/
                                                                                                                                       
