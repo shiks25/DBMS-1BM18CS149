@@ -30,30 +30,39 @@ insert into catalog values(10001,20001,10),
 select distinct p.pname from parts p,catalog c
 where p.pid=c.pid;
 
+                                                                                                                                      
 select s.sname from supplier s where not exists(select pid from parts 
                                             except
                                            select c.pid from catalog c where c.sid=s.sid);     
                                                                                                                                       
 /*or
 select  sname from supplier s
-where s.sid in  (select sid from catalog group by sid having count(pid)=(select count(pid) from parts) );*/
+where s.sid in  (select sid from catalog 
+                 group by sid 
+                 having count(pid)=(select count(pid) from parts) );*/
+     
                                                                                                                                       
-select sname from supplier s where not exists(select pid from parts where color='Red'
+                                                                                                                                      
+select s.sname from supplier s where not exists(select pid from parts where color='Red'
                                               except
-                                              select c.pid from catalog c,parts where c.sid=s.sid and c.pid=p.pid and p.color='Red');
+                                              select c.pid from catalog c,parts p where c.sid=s.sid and c.pid=p.pid and p.color='Red');
                                                                                                                                      
 /*or
 select distinct sname from supplier s,catalog c,parts p
 where s.sid=c.sid and c.pid = p.pid and p.color='Red';*/
+                                                                                                                                      
 
- select pname from parts where pid in (select pid from catalog where sid 
-                                       
-/*orselect p.pname from parts p
-where p.pid not in( select pid from catalog where sid!=(select sid from supplier where sname='Acme Widget'));*/
+select p.pname from parts p,catalog c,supplier s where p.pid=c.pid and s.sid=c.sid and p.pid not in( select pid from catalog 
+                                                                                                 where sid<>(select sid from supplier 
+                                                                                                           where sname='Acme Widget'));
+                                                                     
 
 select distinct c.sid from catalog c where c.cost>(select avg(cost) from catalog c1 where c1.pid=c.pid);
+                                                                                                             
 
-select p.pname ,s.sname from parts p,catalog c,supplier s where c.pid=p.pid and c.sid=s.sid and c.cost=(select max(c1.cost) from catalog c1 where c1.pid=c.pid);
+select p.pname ,s.sname from parts p,catalog c,supplier s where c.pid=p.pid and c.sid=s.sid and c.cost=(select max(c1.cost) 
+                                                                                                        from catalog c1 
+                                                                                                        where c1.pid=c.pid);
 
 
 
