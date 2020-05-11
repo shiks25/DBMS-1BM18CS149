@@ -31,12 +31,12 @@ insert into BankAccount values(11, 'SBI_Jantarmantare', 2000),
  having count(d.customer_name)>=2
  );
  
- select BC.customername from bankcustomer BC where not exists(
+select BC.customer_name from bankcustomer BC where not exists(
 	select branch_name from Branch where branch_city = 'Delhi'
-	except
-    select BA.branch_name from depositer D, BankAccount BA
+	and branch_name not in
+    (select BA.branch_name from depositer D, BankAccount BA
 	where D.accno = BA.accno and BC.customer_name = D.customer_name
-    );
+    ));
     
 delete from BankAccount where branch_name in( select branch_name from Branch where branch_city = 'Bombay' );
 
